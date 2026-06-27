@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 // ─── DESIGN TOKENS ───────────────────────────────────────────
 const C = {
@@ -500,6 +501,7 @@ export default function App() {
         <div style={{ color: C.textDim, fontSize: 13, marginBottom: 20 }}>Powered by Sunstone • BTech CSE & BCA Admissions Open 2026</div>
         <div style={{ color: C.textDim, fontSize: 12 }}>Serving students from Punjab • Himachal Pradesh • Jammu & Kashmir • Chandigarh</div>
       </footer>
+      <Analytics />
     </div>
   );
 }
