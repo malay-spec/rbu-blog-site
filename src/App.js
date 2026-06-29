@@ -473,44 +473,48 @@ export default function App() {
   return (
     <div style={{ minHeight: "100vh", background: C.bg, color: C.text }}>
       {/* Nav */}
-      <nav style={{ background: "rgba(9,9,26,0.97)", borderBottom: `1px solid ${C.border}`, padding: "0 20px", position: "sticky", top: 0, zIndex: 100, backdropFilter: "blur(12px)" }}>
-        <div style={{ maxWidth: 960, margin: "0 auto", height: 68, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+      <nav style={{ background: "#ffffff", borderBottom: "2px solid #e8e8e8", padding: "0 24px", position: "sticky", top: 0, zIndex: 100, boxShadow: "0 2px 12px rgba(0,0,0,0.1)" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto", height: 70, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
 
           {/* Left — Sunstone Logo */}
-          <button onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 14, flexShrink: 0 }}>
-            {/* Sunstone SVG Logo */}
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                <rect x="0" y="0" width="10" height="10" fill="#1B3A6B" rx="1"/>
-                <rect x="12" y="0" width="10" height="10" fill="#1B3A6B" rx="1"/>
-                <rect x="0" y="12" width="10" height="10" fill="#1B3A6B" rx="1"/>
-                <rect x="12" y="12" width="10" height="4" fill="#1B3A6B" rx="1"/>
-              </svg>
-              <span style={{ color: "#1B3A6B", fontWeight: 800, fontSize: 16, fontFamily: "'Outfit',sans-serif", letterSpacing: 1, background: "linear-gradient(135deg, #4a90d9, #7c3aed)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-                SUNSTONE
-              </span>
+          <button onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 6, flexShrink: 0 }}>
+            {/* Sunstone icon — 4 squares matching their actual logo */}
+            <svg width="28" height="20" viewBox="0 0 28 20" fill="none">
+              <rect x="0" y="0" width="8" height="8" fill="#1a5fb4" rx="0.5"/>
+              <rect x="10" y="0" width="8" height="8" fill="#1a5fb4" rx="0.5"/>
+              <rect x="20" y="0" width="8" height="8" fill="#1a5fb4" rx="0.5"/>
+              <rect x="0" y="11" width="8" height="8" fill="#1a5fb4" rx="0.5"/>
+              <rect x="10" y="11" width="8" height="5" fill="#1a5fb4" rx="0.5"/>
+            </svg>
+            <span style={{ color: "#1a5fb4", fontWeight: 800, fontSize: 18, fontFamily: "'Outfit',sans-serif", letterSpacing: 2, textTransform: "uppercase" }}>
+              SUNSTONE
+            </span>
+          </button>
+
+          {/* Centre — Riya CTA Button */}
+          <a href="https://mohali-alpha.vercel.app" target="_blank" rel="noopener noreferrer"
+            style={{ background: "linear-gradient(135deg, #7c3aed, #ef4444)", color: "#fff",
+              padding: "10px 22px", borderRadius: 50, fontWeight: 700, fontSize: 14,
+              textDecoration: "none", flexShrink: 0, whiteSpace: "nowrap",
+              boxShadow: "0 4px 14px rgba(124,58,237,0.4)" }}>
+            Chat with Riya 🤖
+          </a>
+
+          {/* Right — Alpha School of RBU Logo */}
+          <button onClick={() => setPage("home")} style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+            {/* Circular badge */}
+            <div style={{ width: 46, height: 46, borderRadius: "50%", background: "linear-gradient(135deg, #1a3a6b 0%, #c0392b 100%)", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #1a3a6b", flexShrink: 0 }}>
+              <div style={{ textAlign: "center" }}>
+                <div style={{ color: "#f5c842", fontWeight: 900, fontSize: 8, letterSpacing: 0.5, fontFamily: "serif" }}>RAYAT</div>
+                <div style={{ color: "#fff", fontWeight: 900, fontSize: 7, letterSpacing: 0.3 }}>BAHRA</div>
+              </div>
             </div>
-
-            {/* Divider */}
-            <div style={{ width: 1, height: 28, background: "rgba(255,255,255,0.15)" }} />
-
-            {/* Alpha School of RBU */}
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ width: 36, height: 36, borderRadius: "50%", background: "linear-gradient(135deg, #1B3A6B, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid rgba(255,255,255,0.2)", flexShrink: 0 }}>
-                <span style={{ color: "#fff", fontWeight: 900, fontSize: 11, fontFamily: "'Outfit',sans-serif", letterSpacing: 0.5 }}>RBU</span>
-              </div>
-              <div>
-                <div style={{ color: "#fff", fontWeight: 700, fontSize: 12, fontFamily: "'Outfit',sans-serif", lineHeight: 1.2 }}>Alpha School of RBU</div>
-                <div style={{ color: "rgba(255,255,255,0.4)", fontSize: 10 }}>Mohali, Punjab</div>
-              </div>
+            <div>
+              <div style={{ color: "#c0392b", fontWeight: 900, fontSize: 15, fontFamily: "'Outfit',sans-serif", letterSpacing: 0.5, lineHeight: 1.1 }}>ALPHA</div>
+              <div style={{ color: "#1a3a6b", fontWeight: 600, fontSize: 9, letterSpacing: 1, textTransform: "uppercase" }}>SCHOOL OF RBU</div>
             </div>
           </button>
 
-          {/* Right — CTA */}
-          <a href="https://mohali-alpha.vercel.app" target="_blank" rel="noopener noreferrer"
-            style={{ background: "linear-gradient(135deg, #7c3aed, #ef4444)", color: "#fff", padding: "8px 16px", borderRadius: 50, fontWeight: 600, fontSize: 12, textDecoration: "none", flexShrink: 0, whiteSpace: "nowrap" }}>
-            Chat with Riya 🤖
-          </a>
         </div>
       </nav>
 
@@ -521,28 +525,32 @@ export default function App() {
       {/* Footer */}
       <footer style={{ background: C.bgCard, borderTop: `1px solid ${C.border}`, padding: "40px 24px", textAlign: "center" }}>
         {/* Logos row */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 24, marginBottom: 20, flexWrap: "wrap" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 32, marginBottom: 20, flexWrap: "wrap" }}>
           {/* Sunstone */}
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <svg width="18" height="18" viewBox="0 0 22 22" fill="none">
-              <rect x="0" y="0" width="10" height="10" fill="#4a90d9" rx="1"/>
-              <rect x="12" y="0" width="10" height="10" fill="#4a90d9" rx="1"/>
-              <rect x="0" y="12" width="10" height="10" fill="#4a90d9" rx="1"/>
-              <rect x="12" y="12" width="10" height="4" fill="#4a90d9" rx="1"/>
+            <svg width="22" height="16" viewBox="0 0 28 20" fill="none">
+              <rect x="0" y="0" width="8" height="8" fill="#4a90d9" rx="0.5"/>
+              <rect x="10" y="0" width="8" height="8" fill="#4a90d9" rx="0.5"/>
+              <rect x="20" y="0" width="8" height="8" fill="#4a90d9" rx="0.5"/>
+              <rect x="0" y="11" width="8" height="8" fill="#4a90d9" rx="0.5"/>
+              <rect x="10" y="11" width="8" height="5" fill="#4a90d9" rx="0.5"/>
             </svg>
-            <span style={{ color: "#4a90d9", fontWeight: 800, fontSize: 13, fontFamily: "'Outfit',sans-serif", letterSpacing: 1 }}>SUNSTONE</span>
+            <span style={{ color: "#4a90d9", fontWeight: 800, fontSize: 14, fontFamily: "'Outfit',sans-serif", letterSpacing: 2 }}>SUNSTONE</span>
           </div>
-          <div style={{ width: 1, height: 20, background: "rgba(255,255,255,0.15)" }} />
-          {/* RBU */}
+          <div style={{ width: 1, height: 24, background: "rgba(255,255,255,0.15)" }} />
+          {/* Alpha School of RBU */}
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <div style={{ width: 30, height: 30, borderRadius: "50%", background: "linear-gradient(135deg, #1B3A6B, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <span style={{ color: "#fff", fontWeight: 900, fontSize: 9 }}>RBU</span>
+            <div style={{ width: 34, height: 34, borderRadius: "50%", background: "linear-gradient(135deg, #1a3a6b, #c0392b)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <span style={{ color: "#fff", fontWeight: 900, fontSize: 8 }}>RBU</span>
             </div>
-            <span style={{ color: "rgba(255,255,255,0.6)", fontWeight: 600, fontSize: 13, fontFamily: "'Outfit',sans-serif" }}>Alpha School of RBU</span>
+            <div>
+              <div style={{ color: "#c0392b", fontWeight: 900, fontSize: 13, fontFamily: "'Outfit',sans-serif", lineHeight: 1.1 }}>ALPHA</div>
+              <div style={{ color: "rgba(255,255,255,0.5)", fontWeight: 600, fontSize: 8, letterSpacing: 1 }}>SCHOOL OF RBU</div>
+            </div>
           </div>
         </div>
         <div style={{ color: C.text, fontWeight: 700, fontFamily: "'Outfit',sans-serif", fontSize: 15, marginBottom: 6 }}>Rayat Bahra University, Mohali</div>
-        <div style={{ color: C.textDim, fontSize: 13, marginBottom: 16 }}>Powered by Sunstone • BTech CSE & BCA Admissions Open 2026</div>
+        <div style={{ color: C.textDim, fontSize: 13, marginBottom: 12 }}>Powered by Sunstone • BTech CSE & BCA Admissions Open 2026</div>
         <div style={{ color: C.textDim, fontSize: 12 }}>Serving students from Punjab • Himachal Pradesh • Jammu & Kashmir • Chandigarh</div>
       </footer>
     </div>
