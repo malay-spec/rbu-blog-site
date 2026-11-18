@@ -2,10 +2,10 @@
 // Vercel runs this automatically on every upload: it reads every .md file in /posts
 // and writes the finished website into /dist (home page, one page per article,
 // sitemap.xml and robots.txt). No packages to install.
-
+ 
 const fs = require("fs");
 const path = require("path");
-
+ 
 const SITE = {
   url: "https://rbu-blog-site2.vercel.app",
   name: "RBU Mohali admission guides",
@@ -14,15 +14,15 @@ const SITE = {
   googleVerification: "uVPEeyAqXHp8vKzKpxEQKJJTMTgm2kK8YUbtK9ycDPA",
   admissionYear: "2027",
 };
-
+ 
 const ROOT = __dirname;
 const POSTS = path.join(ROOT, "posts");
 const OUT = path.join(ROOT, "dist");
-
+ 
 // ---------- helpers ----------
 const esc = (s) =>
   String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-
+ 
 function inline(text) {
   let s = esc(text);
   s = s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
@@ -32,18 +32,19 @@ function inline(text) {
   });
   return s;
 }
-
+ 
 const riyaLink = (campaign) =>
   `${SITE.riya}?utm_source=blog&utm_medium=article&utm_campaign=${encodeURIComponent(campaign)}`;
-
+ 
 function formatDate(iso) {
   const d = new Date(iso + "T00:00:00Z");
   return d.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 }
-
+ 
 // ---------- reading a post ----------
-function parsePost(file) {
-  const raw = fs.readFileSync(path.join(POSTS, file), "utf8").replace(/\r\n/g, "\n");
+function parsePost(fullPath) {
+  const file = path.basename(fullPath);
+  const raw = fs.readFileSync(fullPath, "utf8").replace(/\r\n/g, "\n");
   const m = raw.match(/^---\n([\s\S]*?)\n---\n?([\s\S]*)$/);
   if (!m) throw new Error(`${file}: the top section between the two --- lines is missing.`);
   const meta = {};
@@ -62,7 +63,7 @@ function parsePost(file) {
   const { html, faqs, intro } = renderBody(m[2]);
   return { ...meta, slug, html, faqs, intro };
 }
-
+ 
 // ---------- turning article text into HTML ----------
 function renderBody(src) {
   const lines = src.split("\n");
@@ -72,12 +73,12 @@ function renderBody(src) {
   let intro = "";
   let i = 0;
   let firstPara = true;
-
+ 
   while (i < lines.length) {
     const line = lines[i];
     const t = line.trim();
     if (!t) { i++; continue; }
-
+ 
     if (t.startsWith("::: stats")) {
       const items = [];
       i++;
@@ -159,7 +160,7 @@ function renderBody(src) {
   }
   return { html: out.join("\n"), faqs, intro };
 }
-
+ 
 // ---------- page pieces ----------
 function head({ title, description, canonical, type = "website", jsonld = [] }) {
   return `<!doctype html>
@@ -195,7 +196,7 @@ ${jsonld.map((j) => `<script type="application/ld+json">${JSON.stringify(j)}</sc
   </div>
 </header>`;
 }
-
+ 
 function foot() {
   return `<footer class="site-footer">
   <div class="wrap">
@@ -207,7 +208,7 @@ function foot() {
 </body>
 </html>`;
 }
-
+ 
 function guideList(posts, campaign) {
   return `<ol class="guides" reversed>
 ${posts
@@ -224,7 +225,7 @@ ${posts
   .join("\n")}
 </ol>`;
 }
-
+ 
 function homePage(posts) {
   const questions = [
     "Is JEE needed for BTech CSE at RBU Mohali?",
@@ -267,7 +268,7 @@ function homePage(posts) {
     foot()
   );
 }
-
+ 
 function articlePage(post, others) {
   const canonical = `${SITE.url}/${post.slug}`;
   const jsonld = [
@@ -319,7 +320,7 @@ ${post.html}
     foot()
   );
 }
-
+ 
 function notFoundPage(posts) {
   return (
     head({ title: "Page not found | RBU Mohali", description: "This page does not exist.", canonical: SITE.url + "/" }) +
@@ -333,7 +334,7 @@ function notFoundPage(posts) {
     foot()
   );
 }
-
+ 
 // ---------- build ----------
 function copyDir(from, to) {
   fs.mkdirSync(to, { recursive: true });
@@ -342,22 +343,32 @@ function copyDir(from, to) {
     fs.statSync(s).isDirectory() ? copyDir(s, d) : fs.copyFileSync(s, d);
   }
 }
-
+ 
 function build() {
   fs.rmSync(OUT, { recursive: true, force: true });
   fs.mkdirSync(OUT, { recursive: true });
-
-  const files = fs.readdirSync(POSTS).filter((f) => f.endsWith(".md") && !f.startsWith("_"));
+ 
+  // Articles can sit in the main folder or in a "posts" folder. README.md and files starting with _ are skipped.
+  const isArticle = (f) => f.endsWith(".md") && !f.startsWith("_") && f.toLowerCase() !== "readme.md";
+  const files = [];
+  if (fs.existsSync(POSTS)) for (const f of fs.readdirSync(POSTS)) if (isArticle(f)) files.push(path.join(POSTS, f));
+  for (const f of fs.readdirSync(ROOT)) if (isArticle(f)) files.push(path.join(ROOT, f));
+  const seen = new Set();
+  for (const f of files) {
+    const name = path.basename(f);
+    if (seen.has(name)) throw new Error(`${name} exists twice. Delete one copy.`);
+    seen.add(name);
+  }
   const posts = files.map(parsePost).sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : a.title.localeCompare(b.title)));
   const today = new Date().toISOString().slice(0, 10);
   const live = posts;
-
+ 
   fs.writeFileSync(path.join(OUT, "index.html"), homePage(live));
   for (const p of live) {
     fs.writeFileSync(path.join(OUT, `${p.slug}.html`), articlePage(p, live.filter((o) => o.slug !== p.slug)));
   }
   fs.writeFileSync(path.join(OUT, "404.html"), notFoundPage(live));
-
+ 
   const urls = [{ loc: SITE.url + "/", lastmod: live[0] ? live[0].date : today }].concat(
     live.map((p) => ({ loc: `${SITE.url}/${p.slug}`, lastmod: p.updated || p.date }))
   );
@@ -368,14 +379,24 @@ function build() {
       `\n</urlset>\n`
   );
   fs.writeFileSync(path.join(OUT, "robots.txt"), `User-agent: *\nAllow: /\n\nSitemap: ${SITE.url}/sitemap.xml\n`);
-  copyDir(path.join(ROOT, "assets"), path.join(OUT, "assets"));
-
+  // Images and the stylesheet can sit in an "assets" folder or in the main folder.
+  const assetsOut = path.join(OUT, "assets");
+  if (fs.existsSync(path.join(ROOT, "assets"))) copyDir(path.join(ROOT, "assets"), assetsOut);
+  fs.mkdirSync(assetsOut, { recursive: true });
+  for (const f of fs.readdirSync(ROOT)) {
+    if (/\.(png|jpe?g|webp|gif|svg|css)$/i.test(f)) fs.copyFileSync(path.join(ROOT, f), path.join(assetsOut, f));
+  }
+  for (const needed of ["style.css", "rbu-alpha-logo.png", "sunstone-logo.png"]) {
+    if (!fs.existsSync(path.join(assetsOut, needed))) throw new Error(`${needed} is missing. Upload it again.`);
+  }
+ 
   console.log(`Built ${live.length} article(s): ${live.map((p) => p.slug).join(", ")}`);
 }
-
+ 
 try {
   build();
 } catch (err) {
   console.error("\nBUILD STOPPED: " + err.message + "\nThe live website has not changed. Fix the file and upload it again.\n");
   process.exit(1);
 }
+ 
