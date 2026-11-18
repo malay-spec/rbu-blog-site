@@ -4,14 +4,14 @@ Live site: https://rbu-blog-site2.vercel.app
 
 ## How the site works
 
-- Every article is one file in the `posts` folder.
+- Every article is one .md file in the main folder of the repository.
 - When you upload to GitHub, Vercel builds the website by itself in about 2 minutes.
 - The home page, the article list, the sitemap and the Riya links are all made automatically.
 - Files starting with an underscore (like `_TEMPLATE.md`) are never published.
 
 ## Adding the weekly blog (every Friday)
 
-1. Open the GitHub repository and go into the `posts` folder.
+1. Open the GitHub repository (the main page with all the files).
 2. Click **Add file**, then **Upload files**, and drop in the new article file (for example `bca-salary-guide-2027.md`).
 3. Click **Commit changes**.
 4. Wait about 2 minutes, then open the new address, for example https://rbu-blog-site2.vercel.app/bca-salary-guide-2027
